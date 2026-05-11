@@ -9,15 +9,15 @@ import { useForm, Controller } from 'react-hook-form'
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { zodResolver } from '@hookform/resolvers/zod'
-import CreateIssueSchema from "@/app/api/issues/schema";
 import { z } from 'zod'
+import CreateIssueSchema from "@/app/api/issues/schema";
 import ErrorMessage from "@/app/components/ErrorMessage";
 import InlineSpinner from "@/app/components/Spinner";
+
 
 type IssueForm = z.infer<typeof CreateIssueSchema>
 
 const NewIssuePage = () => {
-
     const router = useRouter();
     const { register, control, handleSubmit, formState: { errors } } = useForm<IssueForm>({
         resolver: zodResolver(CreateIssueSchema)

@@ -2,6 +2,7 @@ import { Button } from "@radix-ui/themes"
 import Link from "next/link"
 import { Table } from '@radix-ui/themes'
 import { prisma } from "@/lib/prisma"
+import IssueStatusBadge from "../components/IssueStatusBadge"
 
 const IssuePage = async () => {
     const issues = await prisma.issue.findMany();
@@ -26,7 +27,7 @@ const IssuePage = async () => {
                             {issue.title}
                             <div className="block md:hidden">{issue.status}</div>
                         </Table.RowHeaderCell>
-                        <Table.Cell className="hidden md:table-cell">{issue.status}</Table.Cell>
+                        <Table.Cell className="hidden md:table-cell"><IssueStatusBadge status={issue.status} /></Table.Cell>
                         <Table.Cell className="hidden md:table-cell">{issue.createdAt.toLocaleString()}</Table.Cell>
                     </Table.Row>)}
                 </Table.Body>

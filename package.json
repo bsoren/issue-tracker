@@ -31,9 +31,10 @@
     "react-simplemde-editor": "^5.2.0",
     "tailwindcss": "4.3.0",
     "typescript": "6.0.3",
-    "zod": "^3.22.2"
+    "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@hookform/resolvers": "^5.2.2",
     "@types/node": "^25.6.2",
     "prisma": "^7.8.0"
   }

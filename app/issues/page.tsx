@@ -5,6 +5,8 @@ import { prisma } from "@/lib/prisma"
 import IssueStatusBadge from "../components/IssueStatusBadge"
 import delay from 'delay'
 import IssueActions from "./IssueActions"
+import CustomLink from "../components/CustomLink"
+
 
 const IssuePage = async () => {
     const issues = await prisma.issue.findMany();
@@ -26,7 +28,7 @@ const IssuePage = async () => {
                 <Table.Body>
                     {issues.map(issue => <Table.Row key={issue.id}>
                         <Table.RowHeaderCell>
-                            <Link href={`/issues/${issue.id}`} prefetch={false} >{issue.title}</Link>
+                            <CustomLink href={`/issues/${issue.id}`}>{issue.title}</CustomLink>
                             <div className="block md:hidden">{issue.status}</div>
                         </Table.RowHeaderCell>
                         <Table.Cell className="hidden md:table-cell"><IssueStatusBadge status={issue.status} /></Table.Cell>

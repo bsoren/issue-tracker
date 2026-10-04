@@ -16,7 +16,7 @@ const IssueDetailsPage = async ({ params }: { params: Promise<{ id: string }> })
     if (!issue)
         notFound()
 
-    await delay(2000)
+    await delay(500)
 
     return (
         <div>

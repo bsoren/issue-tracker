@@ -1,4 +1,3 @@
-import React from 'react'
 import { Spinner } from '@radix-ui/themes'
 
 interface Props {

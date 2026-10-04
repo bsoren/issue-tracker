@@ -17,70 +17,70 @@ import { z } from "zod";
 import delay from "delay";
 
 const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
-  ssr: false,
+    ssr: false,
 });
 
 type IssueForm = z.infer<typeof CreateIssueSchema>;
 
 const NewIssuePage = () => {
-  const router = useRouter();
-  const {
-    register,
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<IssueForm>({
-    resolver: zodResolver(CreateIssueSchema),
-  });
-  const [error, setError] = useState("");
-  const [isSubmitting, setIsSummitting] = useState(false);
+    const router = useRouter();
+    const {
+        register,
+        control,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<IssueForm>({
+        resolver: zodResolver(CreateIssueSchema),
+    });
+    const [error, setError] = useState("");
+    const [isSubmitting, setIsSummitting] = useState(false);
 
-  const onSubmit = handleSubmit(async (data) => {
-    console.log(`Submitting data ${data}`);
-    try {
-      setIsSummitting(true);
+    const onSubmit = handleSubmit(async (data) => {
+        console.log(`Submitting data ${data}`);
+        try {
+            setIsSummitting(true);
 
-      const response = await axios.post("/api/issues", JSON.stringify(data), {
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      });
-      router.push("/issues");
-    } catch (error) {
-      setError("An unexpected error occurred.");
-    } finally {
-      setIsSummitting(false);
-    }
-  });
+            const response = await axios.post("/api/issues", JSON.stringify(data), {
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                },
+            });
+            router.push("/issues");
+        } catch (error) {
+            setError("An unexpected error occurred.");
+        } finally {
+            setIsSummitting(false);
+        }
+    });
 
-  return (
-    <div className="max-w-xl">
-      {error && (
-        <Callout.Root color="red">
-          <Callout.Text>{error}</Callout.Text>
-        </Callout.Root>
-      )}
-      <form className="flex-row space-y-6" onSubmit={onSubmit}>
-        <TextField.Root
-          placeholder="Enter title..."
-          {...register("title")}
-        ></TextField.Root>
-        <ErrorMessage>{errors.title?.message}</ErrorMessage>
-        <Controller
-          name="description"
-          control={control}
-          render={({ field }) => (
-            <SimpleMDE placeholder="Enter description..." {...field} />
-          )}
-        />
-        <ErrorMessage>{errors.description?.message}</ErrorMessage>
-        <Button disabled={isSubmitting}>
-          Submit New Issue {<InlineSpinner isSubmitting={isSubmitting} />}
-        </Button>
-      </form>
-    </div>
-  );
+    return (
+        <div className="max-w-xl">
+            {error && (
+                <Callout.Root color="red">
+                    <Callout.Text>{error}</Callout.Text>
+                </Callout.Root>
+            )}
+            <form className="flex-row space-y-6" onSubmit={onSubmit}>
+                <TextField.Root
+                    placeholder="Enter title..."
+                    {...register("title")}
+                ></TextField.Root>
+                <ErrorMessage>{errors.title?.message}</ErrorMessage>
+                <Controller
+                    name="description"
+                    control={control}
+                    render={({ field }) => (
+                        <SimpleMDE placeholder="Enter description..." {...field} />
+                    )}
+                />
+                <ErrorMessage>{errors.description?.message}</ErrorMessage>
+                <Button disabled={isSubmitting}>
+                    Submit New Issue {<InlineSpinner isSubmitting={isSubmitting} />}
+                </Button>
+            </form>
+        </div>
+    );
 };
 
 export default NewIssuePage;

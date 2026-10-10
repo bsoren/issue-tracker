@@ -2,6 +2,8 @@ import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { UpdateIssueSchema } from "../schema";
 import delay from "delay";
+import { getServerSession } from "next-auth";
+import authOptions from "@/app/auth/authOptions";
 
 export async function GET(
   _request: Request,
@@ -32,6 +34,9 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ issueId: string }> },
 ) {
+  const session = await getServerSession(authOptions);
+  if (!session) return NextResponse.json({}, { status: 401 });
+
   const { issueId } = await params;
   const id = Number(issueId);
   if (!Number.isInteger(id) || id < 1)
@@ -76,7 +81,10 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ issueId: string }> },
 ) {
-  await delay(2000);
+  const session = await getServerSession(authOptions);
+  if (!session) return NextResponse.json({}, { status: 401 });
+
+  await delay(1000);
   const { issueId } = await params;
 
   let retrievedIssue = await prisma.issue.findUnique({

@@ -6,12 +6,16 @@ import { notFound } from "next/navigation";
 import EditIssueButton from "./EditIssueButton";
 import IssueDetails from "./IssueDetails";
 import DeleteIssueButton from "./DeleteIssueButton";
+import { getServerSession } from "next-auth";
+import authOptions from "@/app/auth/authOptions";
 
 const IssueDetailsPage = async ({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) => {
+  const session = await getServerSession(authOptions);
+
   const { id } = await params;
 
   // fetch issue
@@ -28,10 +32,14 @@ const IssueDetailsPage = async ({
       <Box className="md:col-span-4">
         <IssueDetails issue={issue} />
       </Box>
-      <Flex direction="column" gap="4">
-        <EditIssueButton issueId={issue.id} />
-        <DeleteIssueButton issueId={issue.id} />
-      </Flex>
+      {session && (
+        <Box>
+          <Flex direction="column" gap="4">
+            <EditIssueButton issueId={issue.id} />
+            <DeleteIssueButton issueId={issue.id} />
+          </Flex>
+        </Box>
+      )}
     </Grid>
   );
 };

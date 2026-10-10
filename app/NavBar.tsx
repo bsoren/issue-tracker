@@ -1,33 +1,91 @@
-'use client'
+"use client";
 
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { AiFillBug } from 'react-icons/ai'
-import classNames from 'classnames'
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { AiFillBug } from "react-icons/ai";
+import classNames from "classnames";
+import { Avatar, Box, DropdownMenu, Flex, Text } from "@radix-ui/themes";
+import { Skeleton } from "@/app/components";
 
 const NavBar = () => {
-    const currentPath = usePathname();
+  return (
+    <nav className="space-x-6 mb-5 px-5 py-3">
+      <Flex justify="between">
+        <NavLinks />
+        <AuthStatus />
+      </Flex>
+    </nav>
+  );
+};
 
-    const links = [
-        { label: 'Dashboard', href: '/' },
-        { label: 'Issues', href: '/issues' },
-    ]
+const NavLinks = () => {
+  const currentPath = usePathname();
 
-    return (
-        <nav className='flex space-x-6 mb-5 px-5 h-14 items-center'>
-            <Link href="/"><AiFillBug /></Link>
-            <ul className='flex space-x-6'>
-                {links.map(link => <Link key={link.href}
-                    className={classNames({
-                        'text-zinc-900': link.href === currentPath,
-                        'text-zinc-500': link.href !== currentPath,
-                        'hover:text-zinc-800 transition-colors': true
-                    })}
-                    href={link.href}>{link.label}</Link>)}
-            </ul>
+  const links = [
+    { label: "Dashboard", href: "/" },
+    { label: "Issues", href: "/issues" },
+  ];
 
-        </nav>
-    )
-}
+  return (
+    <Flex align="center" gap="3">
+      <Link href="/">
+        <AiFillBug />
+      </Link>
+      <ul className="flex space-x-6">
+        {links.map((link) => (
+          <li key={link.href}>
+            <Link
+              className={classNames({
+                "text-zinc-900": link.href === currentPath,
+                "text-zinc-500": link.href !== currentPath,
+                "hover:text-zinc-800 transition-colors": true,
+              })}
+              href={link.href}
+            >
+              {link.label}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </Flex>
+  );
+};
 
-export default NavBar
+const AuthStatus = () => {
+  const { status, data: session } = useSession();
+
+  if (status === "loading") return <Skeleton />;
+
+  if (status === "unauthenticated")
+    return <Link href="/api/auth/signin">Login</Link>;
+  return (
+    <Box>
+      {/* {status === "authenticated" && (
+        <Link href="/api/auth/signout">Logout</Link>
+      )} */}
+
+      <DropdownMenu.Root>
+        <DropdownMenu.Trigger>
+          <Avatar
+            src={session!.user!.image!}
+            fallback="?"
+            size="2"
+            radius="full"
+            referrerPolicy="no-referrer"
+          />
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Content>
+          <DropdownMenu.Label>
+            <Text size="3">{session?.user?.email}</Text>
+          </DropdownMenu.Label>
+          <DropdownMenu.Item>
+            <Link href="/api/auth/signout">Logout</Link>
+          </DropdownMenu.Item>
+        </DropdownMenu.Content>
+      </DropdownMenu.Root>
+    </Box>
+  );
+};
+
+export default NavBar;

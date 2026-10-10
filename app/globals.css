@@ -7,6 +7,9 @@
   --foreground-rgb: 0, 0, 0;
 }
 
+.radix-themes {
+  --cursor-button: pointer;
+}
 
 body {
   /* color: rgb(var(--foreground-rgb)); */

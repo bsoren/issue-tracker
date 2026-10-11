@@ -1,13 +1,11 @@
-import authOptions from "@/app/auth/authOptions";
 import { IssueStatusBadge } from "@/app/components";
 import { Issue } from "@/generated/prisma/client";
-import { Heading, Flex, Card, Text, Box } from "@radix-ui/themes";
-import { getServerSession } from "next-auth";
+import { Box, Card, Flex, Heading, Text } from "@radix-ui/themes";
 import ReactMarkDown from "react-markdown";
 
 const IssueDetails = ({ issue }: { issue: Issue }) => {
   return (
-    <Box className="border-2">
+    <Box>
       <Heading>{issue.title}</Heading>
       <Flex gap="4" my="2">
         <IssueStatusBadge status={issue.status} />

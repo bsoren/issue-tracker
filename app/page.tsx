@@ -1,10 +1,5 @@
-import { Button } from "@radix-ui/themes";
-
+import Pagination from "./issues/_components/Pagination";
 
 export default function Home() {
-    return (
-        <div className="p-10">
-            <Button>Click</Button>
-        </div>
-    )
+  return <Pagination currentPage={4} pageSize={10} itemsCount={100} />;
 }

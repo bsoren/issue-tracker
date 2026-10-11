@@ -7,7 +7,7 @@ import { CustomLink, IssueStatusBadge } from "@/app/components";
 const IssuePage = async () => {
   const issues = await prisma.issue.findMany();
 
-  //   await delay(500);
+  await delay(500);
 
   return (
     <div className="mx-4">

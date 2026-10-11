@@ -1,5 +1,7 @@
 {
     "postman.settings.dotenv-detection-notification-visibility": false,
-    "editor.fontSize": 12.5,
-    "editor.fontFamily": "Monaco, 'Courier New', monospace"
+    "editor.fontSize": 14,
+    "editor.fontFamily": "'Andale Mono',Monaco, 'Courier New', monospace",
+    "terminal.integrated.fontFamily": "monospace",
+    "terminal.integrated.fontLigatures.enabled": true
 }

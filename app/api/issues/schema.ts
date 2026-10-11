@@ -1,4 +1,4 @@
-import {z} from 'zod'
+import { z } from 'zod'
 import { Status } from '@/generated/prisma/enums'
 
 const CreateIssueSchema = z.object({

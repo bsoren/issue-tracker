@@ -1,7 +1,8 @@
 import { Issue } from "@/generated/prisma/client";
 import { Status } from "@/generated/prisma/enums";
 import { prisma } from "@/lib/prisma";
-import { Flex } from "@radix-ui/themes";
+import { Flex, Skeleton } from "@radix-ui/themes";
+import { Suspense } from "react";
 import IssueActions from "./IssueActions";
 
 import Pagination from "./_components/Pagination";
@@ -50,11 +51,13 @@ const IssuePage = async ({ searchParams }: Props) => {
     <Flex direction="column" gap="3" className="mx-4">
       <IssueActions />
       <IssueTable searchParams={params} issues={issues} />
-      <Pagination
-        currentPage={currentPage}
-        pageSize={pageSize}
-        itemsCount={issuesCount}
-      />
+      <Suspense fallback={<Skeleton width="220px" height="32px" />}>
+        <Pagination
+          currentPage={currentPage}
+          pageSize={pageSize}
+          itemsCount={issuesCount}
+        />
+      </Suspense>
     </Flex>
   );
 };

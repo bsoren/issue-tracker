@@ -4,8 +4,11 @@ import IssueSummary from "./IssueSummary";
 import LatestIssues from "./LatestIssues";
 import { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
+import { connection } from "next/server";
 
 export default async function Home() {
+  await connection();
+
   const open = await prisma.issue.count({
     where: {
       status: "OPEN",

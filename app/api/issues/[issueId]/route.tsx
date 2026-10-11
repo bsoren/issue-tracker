@@ -1,9 +1,9 @@
+import authOptions from "@/app/auth/authOptions";
 import { prisma } from "@/lib/prisma";
-import { NextRequest, NextResponse } from "next/server";
-import { UpdateIssueSchema } from "../schema";
 import delay from "delay";
 import { getServerSession } from "next-auth";
-import authOptions from "@/app/auth/authOptions";
+import { NextRequest, NextResponse } from "next/server";
+import { UpdateIssueSchema } from "../schema";
 
 export async function GET(
   _request: Request,

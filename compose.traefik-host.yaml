@@ -1,0 +1,20 @@
+# For Traefik running with network_mode: host on a Linux Docker host.
+services:
+  app:
+    ports: !reset []
+    environment:
+      NEXTAUTH_URL: https://${APP_DOMAIN:?Set APP_DOMAIN in .env.app}
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: ${DATABASE_NETWORK:?Set DATABASE_NETWORK in .env.app}
+      traefik.http.routers.issue-tracker.rule: "Host(`${APP_DOMAIN:?Set APP_DOMAIN in .env.app}`)"
+      traefik.http.routers.issue-tracker.entrypoints: ${TRAEFIK_ENTRYPOINT:?Set TRAEFIK_ENTRYPOINT in .env.app}
+      traefik.http.routers.issue-tracker.tls: "true"
+      traefik.http.routers.issue-tracker.tls.certresolver: ${TRAEFIK_CERT_RESOLVER:?Set TRAEFIK_CERT_RESOLVER in .env.app}
+      traefik.http.routers.issue-tracker.service: issue-tracker
+      traefik.http.services.issue-tracker.loadbalancer.server.port: ${PORT:?Set PORT in .env.app}
+
+  migrate:
+    labels:
+      traefik.enable: "false"
+

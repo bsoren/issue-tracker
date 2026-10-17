@@ -110,6 +110,20 @@ On your VPS, add the Traefik overlay instead:
 docker compose --env-file .env.app -f compose.yaml -f compose.traefik.yaml up --build -d
 ```
 
+If your Traefik container uses `network_mode: host` on a Linux VPS, use the
+host-network overlay instead (do not combine the two Traefik overlays):
+
+```bash
+docker compose --env-file .env.app -f compose.yaml -f compose.traefik-host.yaml up --build -d
+```
+
+This selects the app's IP on `DATABASE_NETWORK` for Traefik's Docker provider.
+The Linux host can reach that bridge network directly; no separate proxy network
+or `TRAEFIK_NETWORK` setting is needed. The app and database keep their bridge
+networking, and the app has no published host port. Keep the Docker provider,
+HTTPS entrypoint, and certificate resolver enabled in your existing Traefik.
+Use this same host overlay for subsequent updates, logs, and shutdown commands.
+
 Open `https://YOUR_APP_DOMAIN` on the VPS. The one-shot `migrate` service applies
 committed Prisma migrations before the app starts. It constructs its database URL
 from `.env.app` and escapes credentials. The `DATABASE_URL` setting is for direct

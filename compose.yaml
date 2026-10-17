@@ -1,0 +1,28 @@
+services:
+  app:
+    build: .
+    ports:
+      - "127.0.0.1:${APP_PORT:?Set APP_PORT in .env.app}:${PORT:?Set PORT in .env.app}"
+    env_file:
+      - .env.app
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    networks:
+      - database
+    restart: unless-stopped
+
+  migrate:
+    build:
+      context: .
+      target: migrations
+    env_file:
+      - .env.app
+    networks:
+      - database
+    restart: "no"
+
+networks:
+  database:
+    external: true
+    name: ${DATABASE_NETWORK:?Set DATABASE_NETWORK in .env.app}

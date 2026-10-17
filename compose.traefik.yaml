@@ -1,0 +1,26 @@
+# Add after compose.yaml when deploying behind your existing Traefik.
+services:
+  app:
+    ports: !reset []
+    environment:
+      NEXTAUTH_URL: https://${APP_DOMAIN:?Set APP_DOMAIN in .env.app}
+    networks:
+      - proxy
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: ${TRAEFIK_NETWORK:?Set TRAEFIK_NETWORK in .env.app}
+      traefik.http.routers.issue-tracker.rule: "Host(`${APP_DOMAIN:?Set APP_DOMAIN in .env.app}`)"
+      traefik.http.routers.issue-tracker.entrypoints: ${TRAEFIK_ENTRYPOINT:?Set TRAEFIK_ENTRYPOINT in .env.app}
+      traefik.http.routers.issue-tracker.tls: "true"
+      traefik.http.routers.issue-tracker.tls.certresolver: ${TRAEFIK_CERT_RESOLVER:?Set TRAEFIK_CERT_RESOLVER in .env.app}
+      traefik.http.routers.issue-tracker.service: issue-tracker
+      traefik.http.services.issue-tracker.loadbalancer.server.port: ${PORT:?Set PORT in .env.app}
+
+  migrate:
+    labels:
+      traefik.enable: "false"
+
+networks:
+  proxy:
+    external: true
+    name: ${TRAEFIK_NETWORK:?Set TRAEFIK_NETWORK in .env.app}

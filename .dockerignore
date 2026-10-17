@@ -1,0 +1,14 @@
+node_modules
+.next
+out
+build
+coverage
+.git
+.vscode
+.env
+.env.*
+!.env.*.example
+generated/prisma
+*.log
+*.tsbuildinfo
+.DS_Store

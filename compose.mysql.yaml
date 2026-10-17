@@ -1,0 +1,29 @@
+name: shared-mysql
+
+services:
+  mysql:
+    image: mysql:8.4
+    env_file:
+      - .env.mysql
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", 'MYSQL_PWD="$$MYSQL_PASSWORD" mysql --host=127.0.0.1 --user="$$MYSQL_USER" --database="$$MYSQL_DATABASE" --execute="SELECT 1" > /dev/null 2>&1']
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
+    networks:
+      - database
+    labels:
+      traefik.enable: "false"
+    restart: unless-stopped
+
+networks:
+  database:
+    name: ${DATABASE_NETWORK:?Set DATABASE_NETWORK in .env.mysql}
+
+volumes:
+  mysql_data:
+    # Reuse the volume name from the original combined Compose setup.
+    name: ${MYSQL_VOLUME_NAME:?Set MYSQL_VOLUME_NAME in .env.mysql}
